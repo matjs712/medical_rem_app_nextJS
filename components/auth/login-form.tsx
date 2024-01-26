@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/actions/login";
+import { DotLoader } from "react-spinners";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -70,8 +71,8 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
+      headerLabel="Bienvenido de nuevo"
+      backButtonLabel="No tienes una cuenta?"
       backButtonHref="/auth/register"
       showSocial
     >
@@ -87,7 +88,7 @@ export const LoginForm = () => {
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Two Factor Code</FormLabel>
+                    <FormLabel>Codigo de autenticación 2F</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -107,7 +108,7 @@ export const LoginForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Correo</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -125,7 +126,7 @@ export const LoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>Contraseña</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -141,7 +142,7 @@ export const LoginForm = () => {
                         className="px-0 font-normal"
                       >
                         <Link href="/auth/reset">
-                          Forgot password?
+                          Olvidaste tu contraseña?
                         </Link>
                       </Button>
                       <FormMessage />
@@ -158,7 +159,7 @@ export const LoginForm = () => {
             type="submit"
             className="w-full"
           >
-            {showTwoFactor ? "Confirm" : "Login"}
+            {showTwoFactor ? ( isPending ? <DotLoader size={20} color="#00e74d"/> :"Confirmar") : ( isPending ? <DotLoader size={20} color="#00e74d"/> :"Acceder") }
           </Button>
         </form>
       </Form>

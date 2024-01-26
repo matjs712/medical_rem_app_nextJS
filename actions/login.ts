@@ -36,7 +36,7 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email does not exist!" }
+    return { error: "Correo no registrado!" }
   }
 
   if (!existingUser.emailVerified) {
@@ -49,7 +49,7 @@ export const login = async (
       verificationToken.token,
     );
 
-    return { success: "Confirmation email sent!" };
+    return { success: "Correo de confirmación enviado!" };
   }
 
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
@@ -59,17 +59,17 @@ export const login = async (
       );
 
       if (!twoFactorToken) {
-        return { error: "Invalid code!" };
+        return { error: "Código inválido!" };
       }
 
       if (twoFactorToken.token !== code) {
-        return { error: "Invalid code!" };
+        return { error: "Código inválido!" };
       }
 
       const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
       if (hasExpired) {
-        return { error: "Code expired!" };
+        return { error: "Código caducado!" };
       }
 
       await db.twoFactorToken.delete({
@@ -112,9 +112,9 @@ export const login = async (
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" }
+          return { error: "Credenciales incorrectas!" }
         default:
-          return { error: "Something went wrong!" }
+          return { error: "Ups, algo ha salido mal!" }
       }
     }
 

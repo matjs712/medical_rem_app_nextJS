@@ -1,35 +1,45 @@
+import HomeNav from "@/components/home_nav";
 import { Poppins } from "next/font/google";
-
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/components/auth/login-button";
+import { Button } from "@/components/ui/button";
+import { RegisterForm } from "@/components/auth/register-form";
+import { RegisterButton } from "@/components/auth/register-button";
 
 const font = Poppins({
   subsets: ["latin"],
   weight: ["600"]
 })
+// bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#2ecc71] to-[#072c18] dark:bg-gray-900
 
 export default function Home() {
   return (
-    <main className="flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-      <div className="space-y-6 text-center">
-        <h1 className={cn(
-          "text-6xl font-semibold text-white drop-shadow-md",
-          font.className,
-        )}>
-          🔐 Auth
-        </h1>
-        <p className="text-white text-lg">
-          A simple authentication service
-        </p>
-        <div>
-          <LoginButton  asChild>
-            <Button variant="secondary" size="lg">
-              Sign in
-            </Button>
-          </LoginButton>
-        </div>
+    <section className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1da556] to-[#12763c] h-full flex items-center">
+      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+          <div className="mr-auto place-self-center lg:col-span-7">
+            <h1 className={cn("text-6xl font-semibold text-white drop-shadow-md flex items-center text-center",font.className,)}>
+              <Image src="/libélula.png" width={100} height={100} alt="logo" className="mr-2"/> Li<span className="text-[#2ecc71]">b</span> él
+            </h1>
+            <p className="max-w-2xl mb-6 font-light text-white lg:mb-8 md:text-lg lg:text-xl">Mantén un registro organizado de tus medicamentos para un cuidado de la salud más efectivo.</p>
+            <div className="flex items-center gap-6">
+              <RegisterButton mode="modal" asChild>
+                  <Button variant="ghost" size="lg" className="font-medium text-white hover:bg-transparent p-0 hover:text-[#c5ffc5] hover:drop-shadow-sm">
+                    Empieza gratis
+                    <svg className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </Button>
+                </RegisterButton>
+                <LoginButton mode="modal" asChild>
+                  <Button variant="secondary" size="lg">
+                    Acceder
+                    </Button>
+                </LoginButton>
+            </div>
+          </div>
+          <div className="hidden lg:mt-0 lg:col-span-5 lg:flex justify-center">
+              <Image src="/libélula.png" width={100} height={100} alt="logo" className="mr-2"/>
+          </div>                
       </div>
-    </main>
+  </section>
   )
 }
