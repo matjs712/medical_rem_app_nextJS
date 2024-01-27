@@ -28,7 +28,7 @@ export const login = async (
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Credenciales incorrectas!" };
   }
 
   const { email, password, code } = validatedFields.data;
