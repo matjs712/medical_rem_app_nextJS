@@ -84,17 +84,34 @@ model TwoFactorConfirmation {
 }
 
 model Remedies {
-  id          String   @id @default(cuid())
-  userId      String
-  name        String
-  dosis       Int
-  unit        String
-  description String?
-  type        String?
-  expires_at  Int?
-  isImportant Boolean?
+  id                String     @id @default(cuid())
+  userId            String
+  name              String
+  dosis             Int
+  unit              String
+  start_at          DateTime?
+  indications       String?
+  contraindications String?
+  time              DateTime?
+  description       String?
+  type              String?
+  expires_at        Int?
+  isImportant       Boolean?
+  register          Registers?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model Registers {
+  id        String    @id @default(cuid())
+  RemedieId String
+  dosis     Int
+  start_at  DateTime?
+  time      DateTime?
+
+  user Remedies @relation(fields: [RemedieId], references: [id], onDelete: Cascade)
+
+  @@unique([RemedieId])
 }

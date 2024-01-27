@@ -4,7 +4,8 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import './globals.css'
 import { Toaster } from "@/components/ui/sonner";
-import StarsCanvas from '@/components/starBg'
+import Nav from '@/components/nav'
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,8 +25,11 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={inter.className}>
+          <NextTopLoader color='green' height={4} easing='cubic-bezier(0.53,0.21,0,1'/>
           <Toaster />
-          <StarsCanvas/>
+          <div className="absolute top-0">
+            <Nav/>
+          </div>
           {children}
         </body>
       </html>

@@ -1,4 +1,9 @@
+import MarginWidthWrapper from "@/components/margin-width-wrapper";
 import { Navbar } from "./_components/navbar";
+import Sidebar from "./_components/sidebar";
+import Header from "@/components/header";
+import HeaderMobile from "@/components/header-mobile";
+import PageWrapper from "@/components/page-wrapper";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -6,10 +11,18 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return ( 
-    <div className="h-full w-full flex flex-col gap-y-10 items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-      <Navbar />
-      {children}
-    </div>
+  <div className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1a1a1a] to-[#121212] flex">
+    <Sidebar />
+    <main className="flex-1">
+      <MarginWidthWrapper>
+        <Header />
+        <HeaderMobile />
+        <PageWrapper>
+          {children}
+        </PageWrapper>
+      </MarginWidthWrapper>
+    </main>
+  </div>
    );
 }
  
