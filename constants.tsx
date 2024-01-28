@@ -4,13 +4,13 @@ import { SideNavItem } from './types';
 
 export const SIDENAV_ITEMS: SideNavItem[] = [
   {
-    title: 'Home',
-    path: '/',
+    title: 'Inicio',
+    path: '/dashboard',
     icon: <Icon icon="lucide:home" width="24" height="24" />,
   },
   {
-    title: 'Projects',
-    path: '/projects',
+    title: 'Remedios',
+    path: '/remedios',
     icon: <Icon icon="lucide:folder" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
@@ -20,12 +20,12 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     ],
   },
   {
-    title: 'Messages',
+    title: 'Registros',
     path: '/messages',
     icon: <Icon icon="lucide:mail" width="24" height="24" />,
   },
   {
-    title: 'Settings',
+    title: 'Configuración',
     path: '/settings',
     icon: <Icon icon="lucide:settings" width="24" height="24" />,
     submenu: true,
@@ -35,8 +35,8 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     ],
   },
   {
-    title: 'Help',
-    path: '/help',
+    title: 'Ayuda',
+    path: '/server',
     icon: <Icon icon="lucide:help-circle" width="24" height="24" />,
   },
 ];

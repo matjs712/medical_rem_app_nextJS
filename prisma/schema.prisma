@@ -25,7 +25,8 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  remedie               Remedies?
+  Registers             Registers[]
+  Remedies              Remedies[]
 }
 
 model Account {
@@ -41,8 +42,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -84,7 +84,7 @@ model TwoFactorConfirmation {
 }
 
 model Remedies {
-  id                String     @id @default(cuid())
+  id                String      @id @default(cuid())
   userId            String
   name              String
   dosis             Int
@@ -96,22 +96,21 @@ model Remedies {
   description       String?
   type              String?
   expires_at        Int?
+  img               String?
   isImportant       Boolean?
-  register          Registers?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
+  register          Registers[]
+  User              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Registers {
-  id        String    @id @default(cuid())
-  RemedieId String
-  dosis     Int
-  start_at  DateTime?
-  time      DateTime?
-
-  user Remedies @relation(fields: [RemedieId], references: [id], onDelete: Cascade)
-
-  @@unique([RemedieId])
+  id          String    @id @default(cuid())
+  userId      String
+  remediesId  String
+  dosis       Int
+  start_at    DateTime?
+  lapsus      Int?
+  time        DateTime?
+  isCompleted Boolean?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  remedies    Remedies  @relation(fields: [remediesId], references: [id])
 }

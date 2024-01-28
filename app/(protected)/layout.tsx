@@ -4,10 +4,12 @@ import Sidebar from "./_components/sidebar";
 import Header from "@/components/header";
 import HeaderMobile from "@/components/header-mobile";
 import PageWrapper from "@/components/page-wrapper";
+import { Inter } from "next/font/google";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
 };
+const inter = Inter({ subsets: ['latin'] })
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return ( 

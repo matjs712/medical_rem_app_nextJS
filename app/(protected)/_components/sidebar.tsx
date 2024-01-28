@@ -8,6 +8,14 @@ import { usePathname } from 'next/navigation';
 import { SIDENAV_ITEMS } from '@/constants';
 import { SideNavItem } from '@/types';
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { Poppins } from 'next/font/google';
+
+const font = Poppins({
+  subsets: ["latin"],
+  weight: ["600"]
+})
 
 const Sidebar = () => {
   return (
@@ -17,8 +25,9 @@ const Sidebar = () => {
           href="/dashboard"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-12 w-full"
         >
-          <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
-          <span className="font-bold text-xl hidden md:flex">Logo</span>
+          <h1 className={cn("text-3xl font-semibold text-black drop-shadow-lg flex items-center text-center",font.className,)}>
+              <Image src="/libélula.png" width={40} height={40} alt="logo" className="mr-2"/> Li<span className="text-[#2ecc71]">b</span> él
+          </h1>
         </Link>
 
         <div className="flex flex-col space-y-2  md:px-6 ">
@@ -52,7 +61,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
           >
             <div className="flex flex-row space-x-4 items-center">
               {item.icon}
-              <span className="font-semibold text-xl  flex">{item.title}</span>
+              <span className="font-semibold  flex text-[16px]">{item.title}</span>
             </div>
 
             <div className={`${subMenuOpen ? 'rotate-180' : ''} flex`}>
@@ -71,7 +80,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
                       subItem.path === pathname ? 'font-bold' : ''
                     }`}
                   >
-                    <span>{subItem.title}</span>
+                    <span className=' text-[16px]'>{subItem.title}</span>
                   </Link>
                 );
               })}
@@ -86,7 +95,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
           }`}
         >
           {item.icon}
-          <span className="font-semibold text-xl flex">{item.title}</span>
+          <span className="font-semibold  flex text-[16px]">{item.title}</span>
         </Link>
       )}
     </div>
