@@ -14,7 +14,7 @@ const LoadingTable = () => {
   return (
     <>
       {Array(1).fill(0).map((el, index) => (
-       <table className="w-full table-auto hidden lg:block">
+       <table className="w-full table-auto hidden lg:block" key={index}>
        <thead>
          <tr>
            <th><Skeleton className="h-4 w-[100px]" /></th>

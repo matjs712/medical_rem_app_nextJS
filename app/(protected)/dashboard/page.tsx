@@ -20,9 +20,9 @@ const Dashboard = async () => {
           <RegistersHome/>  
         </Suspense>        
       </div>
-      <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg">
-        actual register's
-      </div>
+      {/* <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg">
+        Registros actuales
+      </div> */}
     </>
   )
 }

@@ -11,7 +11,7 @@ const Loading = () => {
   return (
     <>
       {Array(6).fill(0).map((el, index) => (
-        <Card className="w-[100%] lg:w-[300px] h-[280px]">
+        <Card key={index} className="w-[100%] lg:w-[300px] h-[280px]">
         <CardHeader>
             <Skeleton className="h-4 w-[150px]" />
             <Skeleton className="h-4 w-[250px]" />

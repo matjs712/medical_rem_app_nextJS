@@ -1,6 +1,7 @@
 'use client'
-import { NavigationMenuDemo } from "@/app/page"
+
 import { usePathname } from "next/navigation";
+import NavigationMenuDemo from "./NavigationMenuDemo";
 
 const Nav = () => {
     const path = usePathname();

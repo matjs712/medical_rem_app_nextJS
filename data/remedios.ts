@@ -38,7 +38,7 @@ export const getMedicine = async (id:string) => {
 
 export async function getData(): Promise<Medicine[]> {
     try {
-      const response = await fetch('/api/medicines');
+      const response = await fetch('/api/medicines',  { next: { revalidate: 3600 }, cache:'no-store' });
       const data = await response.json();
       console.log(data);
   
