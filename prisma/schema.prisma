@@ -92,10 +92,11 @@ model Remedies {
   start_at          DateTime?
   indications       String?
   contraindications String?
-  time              DateTime?
+  time              Int?
   description       String?
+  content           Int?
   type              String?
-  expires_at        Int?
+  expires_at        DateTime?
   img               String?
   isImportant       Boolean?
   register          Registers[]
@@ -109,7 +110,7 @@ model Registers {
   dosis       Int
   start_at    DateTime?
   lapsus      Int?
-  time        DateTime?
+  time        Int?
   isCompleted Boolean?
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   remedies    Remedies  @relation(fields: [remediesId], references: [id])

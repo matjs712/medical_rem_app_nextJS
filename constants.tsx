@@ -9,14 +9,13 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:home" width="24" height="24" />,
   },
   {
-    title: 'Remedios',
-    path: '/remedios',
+    title: 'Medicamentos',
+    path: '/mis-medicamentos',
     icon: <Icon icon="lucide:folder" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
-      { title: 'All', path: '/projects' },
-      { title: 'Web Design', path: '/projects/web-design' },
-      { title: 'Graphic Design', path: '/projects/graphic-design' },
+      { title: 'Todos', path: '/mis-medicamentos' },
+      { title: 'Importantes', path: '/mis-medicamentos/importantes' },
     ],
   },
   {

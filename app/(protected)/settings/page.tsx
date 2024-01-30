@@ -101,7 +101,7 @@ const SettingsPage = () => {
                         disabled={isPending}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage/>
                   </FormItem>
                 )}
               />

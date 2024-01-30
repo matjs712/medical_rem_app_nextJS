@@ -63,3 +63,37 @@ export const RegisterSchema = z.object({
     message: "El nombre es requerido",
   }),
 });
+export const MedicinesSchema = z.object({
+  id: z.optional(z.string()),
+  name: z.string().min(1, {
+    message: "El nombre es requerido",
+  }),
+  content: z.optional(z.coerce.number())
+  ,
+  unit: z.optional(z.string())
+  ,
+  indications: z.optional(z.string())
+  ,
+  contraindications: z.optional(z.string())
+  ,
+  description: z.optional(z.string())
+  ,
+  type: z.optional(z.string())
+  ,
+  expires_at: z.optional(z.date())
+  ,
+  img: z.optional(z.string())
+  ,
+  isImportant: z.optional(z.boolean()),
+
+}).refine((data) => {
+  if ((data.content !== undefined && data.unit === undefined)) {
+    return { message: "Si se especifica el contenido total, también se debe especificar su unidad de medida." };
+  }
+  return true;
+}).refine((data) => {
+  if ((data.unit !== undefined && data.content === undefined)) {
+    return { message: "Si se especifica su unidad de medida, también se debe especificar su contenido." };
+  }
+  return true;
+});

@@ -12,10 +12,8 @@ export const getRegisters = async () => {
               userId: user?.id,
               isCompleted: false,
             },
-      
             include: {
                 remedies: true,
-                // user: true
             },
           });
                 
