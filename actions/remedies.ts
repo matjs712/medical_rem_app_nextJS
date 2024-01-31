@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { MedicinesSchema } from "@/schemas";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getData } from "@/data/remedios";
+// import { getData } from "@/data/remedios";
 
 
 export const updateMedicine = async (values: z.infer<typeof MedicinesSchema>) => {

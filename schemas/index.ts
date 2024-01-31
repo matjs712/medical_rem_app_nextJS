@@ -80,7 +80,7 @@ export const MedicinesSchema = z.object({
   ,
   type: z.optional(z.string())
   ,
-  expires_at: z.optional(z.date())
+  expires_at: z.optional(z.date().or(z.string()))
   ,
   img: z.optional(z.string())
   ,

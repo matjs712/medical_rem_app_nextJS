@@ -93,9 +93,15 @@ export const columns: ColumnDef<Medicine>[] = [
         )
       },
       cell: ({ row }) => {
-      const expires_at = row.getValue("expires_at") ?  new Date(row.getValue("expires_at")).getDate() + '/' + new Date(row.getValue("expires_at")).getDay() + '/' + new Date(row.getValue("expires_at")).getFullYear() : '-'
+        const expiresAtDate = new Date(row.getValue("expires_at"));
+        const formattedDate = expiresAtDate ? 
+          expiresAtDate.getDate() +
+          '/' +
+          (expiresAtDate.getMonth() + 1) +
+          '/' +
+          expiresAtDate.getFullYear() : '';
  
-      return (<div className="pl-4 font-medium">{expires_at}</div>)
+      return (<div className="pl-4 font-medium">{formattedDate}</div>)
     },
   },
     // {

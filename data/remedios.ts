@@ -35,16 +35,3 @@ export const getMedicine = async (id:string) => {
         return null
     }
 }
-
-export async function getData(): Promise<Medicine[]> {
-    try {
-      const response = await fetch('/api/medicines',  { next: { revalidate: 3600 }, cache:'no-store' });
-      const data = await response.json();
-      console.log(data);
-  
-      return data;
-    } catch (error) {
-      console.error('Error fetching medicines:', error);
-      throw error;
-    }
-  }

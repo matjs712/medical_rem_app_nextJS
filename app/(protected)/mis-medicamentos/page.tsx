@@ -9,8 +9,8 @@ import { useEffect } from "react";
 import NoSsr from "@mui/material/NoSsr";
 import LoadingTable from "../_components/loading_table";
 import { Card, CardContent } from "@/components/ui/card";
-import { getData } from "@/data/remedios";
-// import { getData } from "@/data/remedios";
+import { getData } from "@/data/medicines";
+
 
 const RemediosPage = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
