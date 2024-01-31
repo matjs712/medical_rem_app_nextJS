@@ -87,7 +87,7 @@ interface Remedie {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Fecha de vencimiento</Label>
-                    <CardDescription>{rem.expires_at ? (rem.expires_at.getDate() + '/' + rem.expires_at.getDay() + '/' + rem.expires_at.getFullYear()) : 'Sin registro'}</CardDescription>
+                    <CardDescription>{rem.expires_at ? rem.expires_at.getDate() + '/' + (rem.expires_at.getMonth() + 1) + '/' + rem.expires_at.getFullYear() : 'Sin registro'}</CardDescription>
                 </div>
               </div>
             </DialogDescription>

@@ -53,6 +53,7 @@ import Datepicker from "tailwind-datepicker-react"
 import { DotLoader } from "react-spinners";
 import { uploadImage } from "@/hooks/useUploadImg";
 import Image from "next/image";
+import { CiEdit } from "react-icons/ci";
 
 
 const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
@@ -200,7 +201,10 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
 
   return (
         <Sheet>
-        <SheetTrigger className="text-sm pl-2">Editar</SheetTrigger>
+        <SheetTrigger className="flex items-center gap-2 hover:bg-gray-300 w-full p-2 rounded-md">
+          <CiEdit/>
+          <span className="text-sm">Editar</span>
+          </SheetTrigger>
             <SheetContent className="flex flex-col gap-4 w-[100vw] left-0 sm:left-[auto] sm:w-3/4" >
             <SheetHeader className="w-full">
                 <SheetTitle>Estás a punto de editar los datos de </SheetTitle>
@@ -333,7 +337,7 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
                                   disabled={isPending}
                                   value={date || ''}
                                 /> */}
-                                <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose} />
+                                <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose} classNames='bg-white'/>
                                 {/* </FormControl>
                                 <FormDescription />
                                 <FormMessage />

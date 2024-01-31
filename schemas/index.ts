@@ -65,6 +65,7 @@ export const RegisterSchema = z.object({
 });
 export const MedicinesSchema = z.object({
   id: z.optional(z.string()),
+  userId: z.optional(z.string()),
   name: z.string().min(1, {
     message: "El nombre es requerido",
   }),
@@ -79,6 +80,8 @@ export const MedicinesSchema = z.object({
   description: z.optional(z.string())
   ,
   type: z.optional(z.string())
+  ,
+  dosis: z.optional(z.number())
   ,
   expires_at: z.optional(z.date().or(z.string()))
   ,

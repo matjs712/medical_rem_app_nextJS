@@ -157,7 +157,7 @@ function Medicines <TData, TValue>({ columns, data, }: DataTableProps<TData, TVa
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24">
-                No results.
+                Sin resultados.
               </TableCell>
             </TableRow>
           )}

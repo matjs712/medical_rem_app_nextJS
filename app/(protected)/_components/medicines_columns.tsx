@@ -13,8 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import EditSheet from "@/components/edit-sheet"
-// import { Sheet, SheetTrigger } from "@/components/ui/sheet"
+import DeleteMedicine from "./delete_medicine"
+import SeeMoreMedicine from "./see_more_medicine"
 
+// import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 export type Medicine = {
     id:                string
     userId:            string
@@ -46,10 +48,6 @@ export const columns: ColumnDef<Medicine>[] = [
     //   accessorKey: "dosis",
     //   header: "Dosis",
     // },
-    {
-      accessorKey: "unit",
-      header: "Unidad",
-    },
     // {
     //   accessorKey: "start_at",
     //   header: "Start Date",
@@ -73,6 +71,10 @@ export const columns: ColumnDef<Medicine>[] = [
     {
       accessorKey: "content",
       header: "Contenido",
+    },
+    {
+      accessorKey: "unit",
+      header: "Unidad",
     },
     {
       accessorKey: "type",
@@ -114,7 +116,7 @@ export const columns: ColumnDef<Medicine>[] = [
     // },
     // ,
     {
-      header: "Acciones",
+      header: "",
       id: "actions",
       cell: ({ row }) => {
         const medicine = row.original
@@ -128,13 +130,17 @@ export const columns: ColumnDef<Medicine>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem>
-                Ver detalles
-              </DropdownMenuItem>
+                            
+              <SeeMoreMedicine medicine={medicine}/>
+
               <DropdownMenuSeparator />
+
               <EditSheet medicine={medicine}/>
-              <DropdownMenuItem>Eliminar</DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              <DeleteMedicine medicine={medicine}/>
+
             </DropdownMenuContent>
           </DropdownMenu>
         )
