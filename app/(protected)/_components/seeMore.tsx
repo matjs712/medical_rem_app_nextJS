@@ -21,7 +21,7 @@ interface Remedie {
     start_at: Date ,
     indications: string ,
     contraindications: string ,
-    time: number,
+    time: string,
     description: string ,
     type: string ,
     expires_at: Date,
@@ -29,8 +29,8 @@ interface Remedie {
     img: string ,
     isImportant: boolean
   }
-  const SeeMore = ({ rem, lapsus, start_at, time }: 
-    { rem: Remedie; lapsus: number | null; start_at: Date | null; time: number | null }) => {    return (
+  const SeeMore = ({ rem, lapsus, start_at }: 
+    { rem: Remedie; lapsus: number | null; start_at: Date | null;}) => {    return (
       <Dialog>
         <DialogTrigger>
           <Button variant="outline" className="text-lg font-bold"><CiCirclePlus/></Button>
@@ -49,10 +49,10 @@ interface Remedie {
                     <Label htmlFor="name" className="font-bold text-[15px]">Cada</Label>
                     <CardDescription>{lapsus ? lapsus + " horas" : 'Sin intervalo'}</CardDescription>
                 </div>
-                <div className="flex flex-col space-y-1.5">
+                {/* <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Durante</Label>
-                    <CardDescription>{time ? time + " dias" : 'Sin tiempo registrado'}</CardDescription>
-                </div>
+                    <CardDescription>{rem.time ? rem.time : 'Sin tiempo registrado'}</CardDescription>
+                </div> */}
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Dosis</Label>
                     <CardDescription>{rem?.dosis ? rem?.dosis + ' ' + rem.unit : 'Sin registro'}</CardDescription>
@@ -61,7 +61,7 @@ interface Remedie {
               
             </DialogDescription>
             
-            <DialogDescription>
+            <DialogDescription className="text-start">
               <Label className="font-bold text-black text-[15px]">Indicaciones</Label>
               <DialogDescription className="flex flex-col gap-2 mb-4">
                 <p>{rem.indications || 'Sin indicaciones'}</p>
@@ -80,7 +80,7 @@ interface Remedie {
             </DialogDescription>
               
             <DialogDescription>
-              <div className="flex w-full items-center gap-4 text-black my-4">
+              <div className="flex w-full items-center gap-4 text-black my-4 justify-between">
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Contenido total</Label>
                     <CardDescription>{rem?.content ? rem?.content +' '+ rem.unit : 'Sin registro'}</CardDescription>

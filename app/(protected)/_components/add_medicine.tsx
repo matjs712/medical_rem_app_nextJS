@@ -72,14 +72,13 @@ export default function AddMedicine() {
   const [isPending, startTransition] = useTransition();
   const [show, setShow] = useState<boolean>(false)
   const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
-    const inputFileRef = useRef<HTMLInputElement>(null);
-    const [date, setDate] = useState<Date | string>();
+  const [success, setSuccess] = useState<string | undefined>("");
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [date, setDate] = useState<Date | string>();
 
   const form = useForm<z.infer<typeof MedicinesSchema>>({
     resolver: zodResolver(MedicinesSchema),
     defaultValues: {
-      id: "",
       name: "",
       unit: "",
       content: 0,

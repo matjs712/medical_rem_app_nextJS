@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { MedicinesSchema } from "@/schemas";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { DELETE } from "@/app/api/images/route";
+import { del } from "@vercel/blob";
 // import { getData } from "@/data/remedios";
 
 
@@ -32,7 +34,7 @@ revalidatePath('/mis-medicamentos');
   return { success: "Medicina actualizada éxitosamente!" };
 }
 
-export const deleteMedicine = async (id: string) => {
+export const deleteMedicine = async ({ id, url } : {id: string, url: string}) => {
   const medicine = db.remedies.findUnique({ where: { id } });
   if(!medicine) return { error: "Medicina no encontrada!" };
   console.log('medicina encontrada', id);
@@ -41,6 +43,8 @@ export const deleteMedicine = async (id: string) => {
 
   if(!user) return { error: "Usuario no encontrado!" };
   
+  const deleteImg = await del(url);
+
   await db.registers.deleteMany({
     where: { remediesId: id },
   });
@@ -67,6 +71,6 @@ export const addMedicine = async (values: any
       ...newData
     },
   });
-
+  // revalidatePath('/mis-medicamentos');
   return { success: "Medicine añadida éxitosamente!" };
 };

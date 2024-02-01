@@ -15,21 +15,23 @@ import { CiEdit } from "react-icons/ci";
 import SeeMore from "./seeMore";
 import NoSsr from '@mui/material/NoSsr';
 import { Badge } from "@/components/ui/badge";
+import { UpdateStateRegisters } from "./updateStateRegister";
 const RegistersHome = async () => {
     const registers = await getRegisters();
+    let id = '';    
     const mappedData = registers?.map(({ remedies, ...rest }) => {
       return {
         rem: {
           id: remedies.id,
           userId: remedies.userId,
           name: remedies.name,
-          dosis: remedies.dosis,
+          dosis: rest.dosis,
           unit: remedies.unit,
           content: remedies.content,
           start_at: remedies.start_at ? new Date(remedies.start_at) : new Date(),
           indications: remedies.indications || '',
           contraindications: remedies.contraindications || '',
-          time: remedies.time || 0,
+          time: rest.time || '',
           description: remedies.description || '',
           isImportant: remedies.isImportant || false,
           expires_at: remedies.expires_at ? new Date(remedies.expires_at) : new Date(),
@@ -37,10 +39,10 @@ const RegistersHome = async () => {
           img: remedies.img || '',
         },
         ...rest,
+        registerId: rest.id,
       };
     });
     
-  console.log(mappedData);
   return (
     <>
         { mappedData?.map((rem, i) => (
@@ -66,10 +68,12 @@ const RegistersHome = async () => {
                     </CardContent>
                     <CardFooter className="flex justify-start gap-2">
                       <NoSsr>
-                        <SeeMore rem={rem.rem} start_at={rem.start_at} time={rem.time} lapsus={rem.lapsus}/>
+                        <SeeMore rem={rem.rem} start_at={rem.start_at} lapsus={rem.lapsus}/>
                       </NoSsr>
                         <Button variant="secondary" className="text-lg"><CiEdit /></Button>
-                        <Button variant="default" className="text-lg text-white font-bold"><CiSaveDown2 /></Button>
+
+                        <UpdateStateRegisters id={ rem.registerId }/>
+
                     </CardFooter>
                 </Card>
             </>

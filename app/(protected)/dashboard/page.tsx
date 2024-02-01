@@ -1,8 +1,7 @@
 import { Suspense } from "react"
 import RegistersHome from "../_components/RegistersHome"
 import Loading from "../_components/Loading_Registers_Home"
-import { Button } from "@/components/ui/button"
-import { FaPlus } from "react-icons/fa6";
+import AddActualRegister from "../_components/add_actual_register";
 
 const Dashboard = async () => {
 
@@ -10,11 +9,10 @@ const Dashboard = async () => {
     <>
       <div className="flex items-center justify-between flex-wrap">
         <h2 className="text-4xl font-semibold my-4" style={{ letterSpacing:"0.6px" }}>Tratamiento <span className="text-[#2ecc71]">Actual</span></h2>
-        <Button variant="complete" size="lg" className="text-white flex items-center gap-2">
-          Añadir al tratamiento
-          <FaPlus />
-        </Button>
+        <AddActualRegister/>
       </div>
+      <p className="text-gray-700 text-justify">Aquí podrás explorar los registros detallados de tu tratamiento actual. Aquí encontrarás información valiosa sobre tus medicamentos, dosis, fechas importantes y mucho más.</p>
+      <br /><br />
       <div className="w-full h-fit rounded-lg flex flex-wrap items-center gap-2">
         <Suspense fallback={<Loading/>}>
           <RegistersHome/>  

@@ -29,7 +29,7 @@ const DeleteMedicine: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
             
             try {
                 
-                const data = await deleteMedicine(medicine.id);
+                const data = await deleteMedicine({ id: medicine.id, url: medicine.img });
                 if (data?.success) {
                 toast.success(data?.success, {
                     description: `Se ha eliminado la medicina ${medicine.name} con éxito!`,

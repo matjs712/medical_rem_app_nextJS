@@ -100,3 +100,13 @@ export const MedicinesSchema = z.object({
   }
   return true;
 });
+export const RegistersSchema = z.object({
+  id: z.optional(z.string()),
+  userId: z.optional(z.string()),
+  remediesId: z.string(),
+  dosis: z.optional(z.coerce.number()),
+  start_at: z.optional(z.date().or(z.string())),
+  lapsus: z.optional(z.coerce.number()),
+  isCompleted: z.optional(z.boolean()),
+  time: z.optional(z.string()), // resultado de la fecha de start_at hasta que se marca como completed, por ejemplo, el tratamiento duró 8 dias.
+})
