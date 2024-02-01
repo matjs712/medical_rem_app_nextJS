@@ -48,6 +48,9 @@ import { Medicine } from './medicines_columns'
 import { addRegister } from '@/actions/registers'
 import { toast } from 'sonner'
 import { redirect } from 'next/navigation'
+import LoadingButton from './loading_button'
+import { getRegisters } from '@/data/registers'
+
 
   const options = {
     title: "Fecha de inicio tratamiento",
@@ -101,12 +104,16 @@ const [isPending, startTransition] = useTransition();
   const [id, setId] = useState<string>("");
   const [unit, setUnit] = useState<string>("");
   const [medicines, setMedicines] = useState<Medicine[]>([]);
-    
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     const getMedicinesAll = async () => {
         const medicines = await getData();
         setMedicines(medicines);
         console.log(medicines);
+        const registersMap = await getRegisters();
+        setLoading(false);
     }
     getMedicinesAll();
   }, [])
@@ -167,15 +174,17 @@ const [isPending, startTransition] = useTransition();
             }
         })
     }
+// if(registers.length == 0 || registers.length < 0 ) return '';
 
   return (
     <>
         <Sheet>
         <SheetTrigger>
-            <Button variant="complete" size="lg" className="text-white flex items-center gap-2">
-                <span className="hidden md:flex">Añadir al tratamiento</span>
-                <FaPlus />
-            </Button></SheetTrigger>
+              <Button variant="complete" size="lg" className="text-white flex items-center gap-2">
+                  <span className="hidden md:flex">Añadir al tratamiento</span>
+                  <FaPlus />
+                </Button>
+            </SheetTrigger>
         <SheetContent className="flex flex-col gap-4 w-[100vw] left-0 sm:left-[auto] sm:w-3/4" >
             <SheetHeader className="w-full">
             <SheetTitle>Estás a punto de añadir un nuevo registro a tu tratamiento actual.</SheetTitle>
@@ -326,3 +335,4 @@ const [isPending, startTransition] = useTransition();
 }
 
 export default AddActualRegister
+

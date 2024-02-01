@@ -10,12 +10,16 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { CiSaveDown2 } from "react-icons/ci";
+import { CiCircleAlert, CiSaveDown2 } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 import SeeMore from "./seeMore";
 import NoSsr from '@mui/material/NoSsr';
 import { Badge } from "@/components/ui/badge";
 import { UpdateStateRegisters } from "./updateStateRegister";
+import { FaPlus } from "react-icons/fa";
+import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 const RegistersHome = async () => {
     const registers = await getRegisters();
     let id = '';    
@@ -45,7 +49,8 @@ const RegistersHome = async () => {
     
   return (
     <>
-        { mappedData?.map((rem, i) => (
+        {
+         mappedData && mappedData?.length > 0 ? mappedData?.map((rem, i) => (
             <>
                <Card className="w-[100%] lg:w-[300px] h-[280px]">
                     <CardHeader>
@@ -76,8 +81,16 @@ const RegistersHome = async () => {
 
                     </CardFooter>
                 </Card>
-            </>
-        )) }
+            </> 
+        )) : <Link href="/mis-medicamentos"><Alert>
+              <CiCircleAlert className="h-4 w-4" />
+              <AlertTitle>No cuentas con tratamientos actuales!</AlertTitle>
+              <AlertDescription>
+                Si no has registrado un medicamento, haz clic aquí para registrar, si ya lo hiciste, entonces puedes empezar a gestionar tus tratamientos!.
+              </AlertDescription>
+            </Alert>
+            </Link>
+       }
     </>
   )
 }

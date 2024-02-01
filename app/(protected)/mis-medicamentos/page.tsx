@@ -33,10 +33,12 @@ const RemediosPage = () => {
     fetchData();
   }, []);
 
+  
+
   return (
     <>
     <div className="flex items-center justify-between flex-wrap">
-      <h2 className="text-4xl font-semibold my-4" style={{ letterSpacing:"0.6px" }}>Mis<span className="text-[#2ecc71]"> medicamentos</span></h2>      
+      <h2 className="text-4xl font-semibold my-4" style={{ letterSpacing:"0.6px" }}>Mis<span className="text-[#2ecc71]"> medicamentos</span></h2>
         <AddMedicine/>
     </div>
     <div className="h-fit rounded-lg flex flex-wrap items-center gap-2 justify-center">
