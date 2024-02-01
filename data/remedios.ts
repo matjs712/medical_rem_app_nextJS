@@ -12,7 +12,7 @@ export const getRemedies = async () => {
                 userId: user?.id
             }
         })
-
+        // console.log(remedies);
         return remedies;
     } catch (error) {
         console.log(error);

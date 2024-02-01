@@ -31,7 +31,7 @@ export const NewVerificationForm = () => {
         setError(data.error);
       })
       .catch(() => {
-        setError("Something went wrong!");
+        setError("Algo ha salido mal!");
       })
   }, [token, success, error]);
 
@@ -41,8 +41,8 @@ export const NewVerificationForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Confirming your verification"
-      backButtonLabel="Back to login"
+      headerLabel="Confirmando tu verificación"
+      backButtonLabel="Volver al inicio"
       backButtonHref="/auth/login"
     >
       <div className="flex items-center w-full justify-center">
