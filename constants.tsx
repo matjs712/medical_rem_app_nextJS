@@ -20,7 +20,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
   {
     title: 'Registros',
-    path: '/messages',
+    path: '/registros',
     icon: <Icon icon="lucide:mail" width="24" height="24" />,
   },
   {

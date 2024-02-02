@@ -15,25 +15,9 @@ import {
 import EditSheet from "@/components/edit-sheet"
 import DeleteMedicine from "./delete_medicine"
 import SeeMoreMedicine from "./see_more_medicine"
+import { Badge } from "@/components/ui/badge"
+import { Medicine } from "./medicines_columns"
 
-// import { Sheet, SheetTrigger } from "@/components/ui/sheet"
-export type Medicine = {
-    id:                string
-    userId:            string
-    name:              string
-    dosis:             number
-    unit:              string
-    start_at:          Date
-    indications:       string
-    contraindications: string
-    time:              number
-    description:       string
-    content:           number
-    type:              string
-    expires_at:        Date
-    img:               string
-    isImportant:       Boolean,
-}
 export type Register = {
   id:                string
   userId:            string
@@ -47,23 +31,34 @@ export type Register = {
   remedies?: Medicine[]
 }
 
-export const columns: ColumnDef<Medicine>[] = [
+export const columns: ColumnDef<Register>[] = [
     // {
     //   accessorKey: "id",
     //   header: "ID",
     // },
     {
-      accessorKey: "name",
-      header: "Nombre",
+      accessorKey: "remedies.name",
+      header: "Medicamento",
+      // cell: ({ row }:{row : any}) => {
+      //   return row.original.remedies.name
+      // }
     },
-    // {
-    //   accessorKey: "dosis",
-    //   header: "Dosis",
-    // },
-    // {
-    //   accessorKey: "start_at",
-    //   header: "Start Date",
-    // },
+    {
+      accessorKey: "dosis",
+      header: "Cantidad",
+    },
+    {
+      accessorKey: "lapsus",
+      header: "Cada",
+      cell: ({ row }:{row : any}) => {
+        let time = row.original.time
+        let formattedLapsus = row.original.lapsus;
+        if(time == 'hrs') {
+          formattedLapsus = row.original.lapsus / 2
+        }
+      return (<div className="pl-4 font-medium">{formattedLapsus}</div>)
+    },
+    },
     // {
     //   accessorKey: "indications",
     //   header: "Indications",
@@ -72,28 +67,28 @@ export const columns: ColumnDef<Medicine>[] = [
     //   accessorKey: "contraindications",
     //   header: "Contraindications",
     // },
-    // {
-    //   accessorKey: "time",
-    //   header: "Time",
-    // },
+    {
+      accessorKey: "time",
+      header: "Unidad",
+    },
     // {
     //   accessorKey: "description",
     //   header: "Description",
     // },
+    // {
+    //   accessorKey: "content",
+    //   header: "Contenido",
+    // },
+    // {
+    //   accessorKey: "unit",
+    //   header: "Unidad",
+    // },
+    // {
+    //   accessorKey: "type",
+    //   header: "Tipo",
+    // },
     {
-      accessorKey: "content",
-      header: "Contenido",
-    },
-    {
-      accessorKey: "unit",
-      header: "Unidad",
-    },
-    {
-      accessorKey: "type",
-      header: "Tipo",
-    },
-    {
-      accessorKey: "expires_at",
+      accessorKey: "start_at",
       // header: "Expira en",
       header: ({ column }) => {
         return (
@@ -101,13 +96,13 @@ export const columns: ColumnDef<Medicine>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Expira en
+            Desde
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
       cell: ({ row }) => {
-        const expiresAtDate = new Date(row.getValue("expires_at"));
+        const expiresAtDate = new Date(row.getValue("start_at"));
         const formattedDate = expiresAtDate ? 
           expiresAtDate.getDate() +
           '/' +
@@ -122,11 +117,17 @@ export const columns: ColumnDef<Medicine>[] = [
     //   accessorKey: "img",
     //   header: "Image",
     // },
-    // {
-    //   accessorKey: "isImportant",
-    //   header: "Is Important",
-    // },
-    // ,
+    {
+      accessorKey: "isCompleted",
+      header: "Completado",
+      cell: ({ row }) => {
+        if(row.original.isCompleted){
+          return <Badge variant="default">Completado</Badge>
+        } else{
+          return <Badge variant="success">Activo</Badge>
+        }
+      }
+    },
     {
       header: "",
       id: "actions",
@@ -143,7 +144,7 @@ export const columns: ColumnDef<Medicine>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                             
-              <SeeMoreMedicine medicine={medicine}/>
+              {/* <SeeMoreMedicine medicine={medicine}/>
 
               <DropdownMenuSeparator />
 
@@ -151,7 +152,7 @@ export const columns: ColumnDef<Medicine>[] = [
 
               <DropdownMenuSeparator />
 
-              <DeleteMedicine medicine={medicine}/>
+              <DeleteMedicine medicine={medicine}/> */}
 
             </DropdownMenuContent>
           </DropdownMenu>

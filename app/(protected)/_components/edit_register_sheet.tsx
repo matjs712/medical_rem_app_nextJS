@@ -188,7 +188,7 @@ const [isPending, startTransition] = useTransition();
     <>
         <Sheet>
         <SheetTrigger>
-            <Button variant="default" className="text-lg text-white font-bold"><CiEdit/></Button>
+            <Button variant="outline" className="text-lg font-bold"><CiEdit/></Button>
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-4 w-[100vw] left-0 sm:left-[auto] sm:w-3/4" >
             <SheetHeader className="w-full">

@@ -91,7 +91,7 @@ import { getRegisters } from '@/data/registers'
     },
     background:"bg-white",
   }
-const AddActualRegister = () => {
+const AddActualRegister = ({ redirec }:{ redirec?:string }) => {
 
 const [isPending, startTransition] = useTransition();
   const [show, setShow] = useState<boolean>(false)
@@ -170,7 +170,9 @@ const [isPending, startTransition] = useTransition();
             } catch (error) {
               console.log(error);
             } finally {
-              // redirect('/dashboard');
+              if(redirec){
+                redirect('/registros');
+              }
             }
         })
     }
