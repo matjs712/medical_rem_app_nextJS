@@ -29,8 +29,8 @@ interface Remedie {
     img: string ,
     isImportant: boolean
   }
-  const SeeMore = ({ rem, lapsus, start_at }: 
-    { rem: Remedie; lapsus: number | null; start_at: Date | null;}) => {    return (
+  const SeeMore = ({ rem, lapsus, start_at, time }: 
+    { rem: Remedie; lapsus: number | null; start_at: Date | null; time: string}) => {    return (
       <Dialog>
         <DialogTrigger>
           <Button variant="outline" className="text-lg font-bold"><CiCirclePlus/></Button>
@@ -43,11 +43,13 @@ interface Remedie {
               <div className="flex justify-between w-full items-center gap-4 text-black my-4">
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Desde</Label>
-                    <CardDescription>{start_at ? (start_at.getDate() + '/' + start_at.getDay() + '/' + start_at.getFullYear()) : 'Sin fecha de inicio'}</CardDescription>
+                    <CardDescription>{
+                    start_at ? start_at.getUTCDate().toString().padStart(2, '0') + '/' + (start_at.getUTCMonth() + 1).toString().padStart(2, '0') + '/' + start_at.getUTCFullYear() : 'Sin fecha de inicio'
+                    }</CardDescription>
                 </div>
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Cada</Label>
-                    <CardDescription>{lapsus ? lapsus + " horas" : 'Sin intervalo'}</CardDescription>
+                    <CardDescription>{lapsus ?  time == 'hrs' ? (lapsus/2) + " horas" : lapsus + " minutos" : 'Sin registro'  }</CardDescription>
                 </div>
                 {/* <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name" className="font-bold text-[15px]">Durante</Label>

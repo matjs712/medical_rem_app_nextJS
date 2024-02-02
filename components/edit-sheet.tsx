@@ -90,7 +90,7 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
           next: () => <span className="text-black">Siguiente</span>,
       },
       datepickerClassNames: "top-12",
-      defaultDate: new Date(medicine.expires_at) || new Date("2022-01-01"),
+      defaultDate: new Date(medicine.expires_at) || new Date(),
       language: "es",
       disabledDates: [],
       weekDays: ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"],

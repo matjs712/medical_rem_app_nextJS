@@ -5,7 +5,6 @@ export async function getData(): Promise<Medicine[]> {
     try {
       const response = await fetch('/api/medicines',  { next: { revalidate: 3600 } });
       const data = await response.json();
-      console.log(data);
   
       return data;
     } catch (error) {

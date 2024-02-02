@@ -34,6 +34,17 @@ export type Medicine = {
     img:               string
     isImportant:       Boolean,
 }
+export type Register = {
+  id:                string
+  userId:            string
+  remediesId:        string
+  dosis:             number
+  start_at?:         Date | null
+  lapsus?:            number | null
+  isCompleted?:       Boolean | false | null
+  time?:              string | null
+  totalTime?:         number | null
+}
 
 export const columns: ColumnDef<Medicine>[] = [
     // {

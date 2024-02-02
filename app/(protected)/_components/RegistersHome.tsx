@@ -1,6 +1,6 @@
 // 'use server'
 import { getRegisters } from "@/data/registers"
-import { Button } from "@/components/ui/button"
+
 import {
   Card,
   CardContent,
@@ -10,15 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { CiCircleAlert, CiSaveDown2 } from "react-icons/ci";
-import { CiEdit } from "react-icons/ci";
+import { CiCircleAlert } from "react-icons/ci";
 import SeeMore from "./seeMore";
 import NoSsr from '@mui/material/NoSsr';
 import { Badge } from "@/components/ui/badge";
 import { UpdateStateRegisters } from "./updateStateRegister";
-import { FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import EditSheetRegisters from "./edit_register_sheet";
 
 const RegistersHome = async () => {
     const registers = await getRegisters();
@@ -35,7 +34,7 @@ const RegistersHome = async () => {
           start_at: remedies.start_at ? new Date(remedies.start_at) : new Date(),
           indications: remedies.indications || '',
           contraindications: remedies.contraindications || '',
-          time: rest.time || '',
+          time: rest.time || '' ,
           description: remedies.description || '',
           isImportant: remedies.isImportant || false,
           expires_at: remedies.expires_at ? new Date(remedies.expires_at) : new Date(),
@@ -44,6 +43,7 @@ const RegistersHome = async () => {
         },
         ...rest,
         registerId: rest.id,
+        time: rest.time || ''
       };
     });
     
@@ -52,7 +52,7 @@ const RegistersHome = async () => {
         {
          mappedData && mappedData?.length > 0 ? mappedData?.map((rem, i) => (
             <>
-               <Card className="w-[100%] lg:w-[300px] h-[280px]">
+               <Card className="w-[100%] lg:w-[300px] h-[280px]" key={i}>
                     <CardHeader>
                         <CardTitle className="flex items-center">{ rem.rem.name } { rem.rem.isImportant ? <Badge variant="destructive" className="ml-2">Importante</Badge>:<Badge className="ml-2" variant="secondary">Común</Badge> }</CardTitle>
                         <CardDescription className="min-h-[80px] text-justify">{rem.rem.description ? rem.rem.description?.substring(0,130) + '...' : 'Sin descripción'}</CardDescription>
@@ -62,20 +62,21 @@ const RegistersHome = async () => {
                         <div className="flex justify-between w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Desde</Label>
-                                <CardDescription>{rem.start_at ? (rem.start_at.getDate() + '/' + rem.start_at.getDay() + '/' + rem.start_at.getFullYear()) : 'Sin fecha de inicio'}</CardDescription>
+                                <CardDescription>{rem.start_at ? rem.start_at ? rem.start_at.getUTCDate().toString().padStart(2, '0') + '/' + (rem.start_at.getUTCMonth() + 1).toString().padStart(2, '0') + '/' + rem.start_at.getUTCFullYear() : 'Sin fecha de inicio' : 'Sin fecha de inicio'}</CardDescription>
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Cada</Label>
-                                <CardDescription>{rem.lapsus ? rem.lapsus + " horas" : 'Sin intervalo'}</CardDescription>
+                                <CardDescription>{rem.lapsus ?  rem.time == 'hrs' ? (rem.lapsus/2) + " horas" : rem.lapsus + " minutos" : 'Sin registro'  }</CardDescription>
                             </div>
                         </div>
                         </form>
                     </CardContent>
                     <CardFooter className="flex justify-start gap-2">
                       <NoSsr>
-                        <SeeMore rem={rem.rem} start_at={rem.start_at} lapsus={rem.lapsus}/>
+                        <SeeMore rem={rem.rem} time={rem.time} start_at={rem.start_at} lapsus={rem.lapsus}/>
                       </NoSsr>
-                        <Button variant="secondary" className="text-lg"><CiEdit /></Button>
+                        
+                        <EditSheetRegisters register={rem}/>
 
                         <UpdateStateRegisters id={ rem.registerId }/>
 

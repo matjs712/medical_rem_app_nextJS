@@ -41,6 +41,30 @@ export const addRegister = async (values: any
     return { success:"Registro añadido con exito" }
 }
 
+export const updateRegister = async (values: z.infer<typeof RegistersSchema>) => {
+    
+    const { id } = values;
+    const user = await currentUser();
+    if(!user) return { error: "No se encontró al usuario" }
+
+    const register = db.registers.findUnique({
+        where: { id: values.id }
+    })
+    if(!register) return { error: "No se encontró el registro." }
+
+
+    await db.registers.update({
+        where: { id },
+        data: {
+            userId:user.id,
+            ...values
+        }
+    })
+
+    revalidatePath('/dashboard');
+
+    return { success: 'Tratamiento actualizado con éxito!' }
+}
 export const updateStateRegister = async (id: string) => {
 
     const user = await currentUser();
@@ -62,3 +86,4 @@ export const updateStateRegister = async (id: string) => {
 
     return { success: 'Tratamiento finalizado!' }
 }
+
