@@ -74,5 +74,5 @@ export const addMedicine = async (values: any
     },
   });
   // revalidatePath('/mis-medicamentos');
-  return { success: "Medicine añadida éxitosamente!" };
+  return { success: "Medicina añadida éxitosamente!" };
 };

@@ -156,7 +156,7 @@ export default function AddMedicine() {
                 }
             })
           } else {
-            addMedicine(values)
+            addMedicine(defaultValuess)
               .then((resp)=> {
                 if(resp.success) {
                   setSuccess(resp.success);
