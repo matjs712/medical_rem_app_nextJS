@@ -61,6 +61,8 @@ export const addMedicine = async (values: any
   if (!validatedFields.success) {
     return { error: "Campos incorrectos!" };
   }
+  if(!values.name) return { error: "El medicamento necesita un nombre!" };
+
   const user = await currentUser();
   
   if(!user) return { error: "No hay usuario!" };

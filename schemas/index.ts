@@ -66,9 +66,10 @@ export const RegisterSchema = z.object({
 export const MedicinesSchema = z.object({
   id: z.optional(z.string()),
   userId: z.optional(z.string()),
-  name: z.string().min(1, {
-    message: "El nombre es requerido",
-  }),
+  name: z.optional(z.string()),
+  // z.string().min(1, {
+  //   message: "El nombre es requerido",
+  // }),
   content: z.optional(z.coerce.number())
   ,
   unit: z.optional(z.string())
@@ -87,7 +88,7 @@ export const MedicinesSchema = z.object({
   ,
   img: z.optional(z.string())
   ,
-  isImportant: z.optional(z.boolean()),
+  isImportant: z.optional(z.any()),
 
 }).refine((data) => {
   if ((data.content !== undefined && data.unit === undefined)) {
@@ -100,6 +101,7 @@ export const MedicinesSchema = z.object({
   }
   return true;
 });
+
 export const RegistersSchema = z.object({
   id: z.optional(z.string()),
   userId: z.optional(z.string()),
@@ -109,4 +111,16 @@ export const RegistersSchema = z.object({
   lapsus: z.optional(z.coerce.number()),
   isCompleted: z.optional(z.boolean()),
   time: z.optional(z.string()), // resultado de la fecha de start_at hasta que se marca como completed, por ejemplo, el tratamiento duró 8 dias.
+})
+
+export const MedicinesApiSchema = z.object({
+  id: z.optional(z.string()),
+  name: z.optional(z.string()),
+  unit: z.optional(z.string()),
+  indications: z.optional(z.string()),
+  contraindications: z.optional(z.string()),
+  description: z.optional(z.string()),
+  content: z.optional(z.number()),
+  type: z.optional(z.string()),
+  expires_at: z.optional(z.date().or(z.string())),
 })

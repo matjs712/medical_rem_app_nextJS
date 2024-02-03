@@ -34,6 +34,17 @@ export type Medicine = {
     img:               string
     isImportant:       Boolean,
 }
+export type ApiMedicines = {
+    id:                string | null
+    name?:              string | null
+    unit?:              string | null
+    indications?:       string | null
+    contraindications?: string | null
+    description?:       string | null
+    content?:           number | null
+    type?:              string | null
+    // expires_at?:        Date
+}
 export type Register = {
   id:                string
   userId:            string

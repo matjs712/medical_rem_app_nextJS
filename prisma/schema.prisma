@@ -103,16 +103,30 @@ model Remedies {
   User              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model MedicinesApi {
+  id                String    @id @default(cuid())
+  name              String
+  unit              String
+  indications       String?
+  contraindications String?
+  description       String?
+  content           Int?
+  type              String?
+  expires_at        DateTime?
+  // @@unique([name])
+}
+
 model Registers {
-  id          String    @id @default(cuid())
-  userId      String
-  remediesId  String
-  dosis       Int
-  start_at    DateTime?
-  lapsus      Int?
-  time        String?
-  totalTime   Int?
-  isCompleted Boolean?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  remedies    Remedies  @relation(fields: [remediesId], references: [id])
+  id            String    @id @default(cuid())
+  userId        String
+  remediesId    String
+  dosis         Int
+  start_at      DateTime?
+  lapsus        Int?
+  time          String?
+  totalTime     Int?
+  totalTimeUnit String?
+  isCompleted   Boolean?
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  remedies      Remedies  @relation(fields: [remediesId], references: [id])
 }

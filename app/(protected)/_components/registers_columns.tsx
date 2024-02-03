@@ -7,9 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import EditSheet from "@/components/edit-sheet"
@@ -17,6 +14,8 @@ import DeleteMedicine from "./delete_medicine"
 import SeeMoreMedicine from "./see_more_medicine"
 import { Badge } from "@/components/ui/badge"
 import { Medicine } from "./medicines_columns"
+import NoSsr from "@mui/material/NoSsr"
+import SeeMoreRegister from "./seeMoreRegister"
 
 export type Register = {
   id:                string
@@ -32,10 +31,6 @@ export type Register = {
 }
 
 export const columns: ColumnDef<Register>[] = [
-    // {
-    //   accessorKey: "id",
-    //   header: "ID",
-    // },
     {
       accessorKey: "remedies.name",
       header: "Medicamento",
@@ -59,34 +54,10 @@ export const columns: ColumnDef<Register>[] = [
       return (<div className="pl-4 font-medium">{formattedLapsus}</div>)
     },
     },
-    // {
-    //   accessorKey: "indications",
-    //   header: "Indications",
-    // },
-    // {
-    //   accessorKey: "contraindications",
-    //   header: "Contraindications",
-    // },
     {
       accessorKey: "time",
       header: "Unidad",
     },
-    // {
-    //   accessorKey: "description",
-    //   header: "Description",
-    // },
-    // {
-    //   accessorKey: "content",
-    //   header: "Contenido",
-    // },
-    // {
-    //   accessorKey: "unit",
-    //   header: "Unidad",
-    // },
-    // {
-    //   accessorKey: "type",
-    //   header: "Tipo",
-    // },
     {
       accessorKey: "start_at",
       // header: "Expira en",
@@ -113,10 +84,6 @@ export const columns: ColumnDef<Register>[] = [
       return (<div className="pl-4 font-medium">{formattedDate}</div>)
     },
   },
-    // {
-    //   accessorKey: "img",
-    //   header: "Image",
-    // },
     {
       accessorKey: "isCompleted",
       header: "Completado",
@@ -131,9 +98,19 @@ export const columns: ColumnDef<Register>[] = [
     {
       header: "",
       id: "actions",
+
       cell: ({ row }) => {
-        const medicine = row.original
-   
+        const register = row.original;
+        const registers = {
+          ...register,
+          lapsus: register.lapsus,
+          isCompleted: register.isCompleted,
+          dosis: register.dosis,
+          time: register.time,
+          totalTime: register.totalTime,
+        }
+        console.log('row',register);
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -144,8 +121,12 @@ export const columns: ColumnDef<Register>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                             
-              {/* <SeeMoreMedicine medicine={medicine}/>
+              <NoSsr>
+                
+                <SeeMoreRegister rem={registers}/>
+              </NoSsr>
 
+            {/* 
               <DropdownMenuSeparator />
 
               <EditSheet medicine={medicine}/>

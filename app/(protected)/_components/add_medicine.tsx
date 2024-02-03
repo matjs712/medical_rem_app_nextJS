@@ -15,10 +15,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { useForm } from 'react-hook-form'
-import { MedicinesSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useRef, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import DatePicker from 'tailwind-datepicker-react'
 import { Textarea } from '@/components/ui/textarea'
 import { FormError } from '@/components/form-error'
@@ -28,6 +27,14 @@ import { uploadImage } from '@/hooks/useUploadImg'
 import { addMedicine } from '@/actions/remedies'
 import { toast } from 'sonner'
 import { redirect } from 'next/navigation'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { ArrowDownIcon, CheckIcon } from '@radix-ui/react-icons'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
+import { MedicinesSchema } from '@/schemas'
+import { getMedicinesApi } from '@/data/apiMedicines'
+import { ApiMedicines } from './medicines_columns'
+import { cn } from '@/lib/utils'
+
 const options = {
   title: "Fecha de expiración",
   autoHide: true,
@@ -67,6 +74,21 @@ const options = {
   },
   background:"bg-white",
 }
+
+const values = {
+  name: "" ,
+  unit: "",
+  content: 0,
+  indications: "",
+  contraindications: "",
+  description:"",
+  type:"",
+  dosis: 0,
+  expires_at: new Date(),
+  img:"",
+  isImportant: false,
+}
+
 export default function AddMedicine() {
 
   const [isPending, startTransition] = useTransition();
@@ -75,40 +97,42 @@ export default function AddMedicine() {
   const [success, setSuccess] = useState<string | undefined>("");
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = useState<Date | string>();
+  const [defaultValuess, setDefaultValuess] = useState(values);
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<string | null | undefined>("");
+  const [id, setId] = useState<string  | null>("");
+  const [unit, setUnit] = useState<string | null | undefined>("");
+  const [loading, setLoading] = useState(false);
+  
+  const [seedMedicines, setSeedMedicines] = useState<ApiMedicines[]>([]);
+
 
   const form = useForm<z.infer<typeof MedicinesSchema>>({
     resolver: zodResolver(MedicinesSchema),
-    defaultValues: {
-      name: "",
-      unit: "",
-      content: 0,
-      indications: "",
-      contraindications: "",
-      description:"",
-      type:"",
-      dosis: 0,
-      expires_at: new Date(),
-      img:"",
-      isImportant: false,
-    },
+    defaultValues: defaultValuess
   });
 
   const handleClose = (state: boolean) => setShow(state);
   const handleChange = (selectedDate: Date) => {
     const expiresAt = selectedDate.toISOString();
     setDate(expiresAt);
+    setDefaultValuess({
+      ...defaultValuess,
+      expires_at: new Date(expiresAt)
+    })
   };
 
-  const onSubmit = (values: z.infer<typeof MedicinesSchema>) => {
-    startTransition( async ()=> {
+  const onSubmit = ( values: z.infer<typeof MedicinesSchema> ) => {
+      startTransition( async ()=> {
+        
         try {
           if (!inputFileRef.current?.files) throw new Error("No file selected");
             const file = inputFileRef.current.files[0];
 
             if(file){
               const imgUrl = await uploadImage({ file });
-              const mappedValues = { ...values, img: imgUrl };
-              
+              const mappedValues = { ...defaultValuess, img: imgUrl };
+
               addMedicine(mappedValues)
               .then((resp)=> {
                 if(resp.success) {
@@ -163,7 +187,30 @@ export default function AddMedicine() {
 
     })
   }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDefaultValuess({
+      ...defaultValuess,
+      [e.target.name] : e.target.value
+    })
+  }
   
+
+  useEffect(() => {
+
+    const getAllSeedMedicines = async () =>{
+      try {
+        const apiMedicines = await getMedicinesApi()
+        setSeedMedicines(apiMedicines);
+        console.log('apiMedicines', apiMedicines);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getAllSeedMedicines();
+
+  }, [])
+  
+
   return (
     <Sheet>
       <SheetTrigger >
@@ -176,7 +223,67 @@ export default function AddMedicine() {
         <SheetHeader className="w-full">
           <SheetTitle>Añadir medicamento</SheetTitle>
           <SheetDescription className="h-[80vh] overflow-scroll">
-            <p className='mb-3'>Los campos marcados con * son obligatorios.</p>
+            <p className='mb-3'>Aquí puedes buscar un medicamento y modificar sus datos a tu conveniencia o simplemente registrar tu medicamento.</p>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                  >
+                                        {value
+                                            ? seedMedicines?.find((medicamento) => medicamento.name === value)?.name
+                                            : "Selecciona un medicamento..."}
+                                        <ArrowDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-full p-0">
+                                        <Command>
+                                        <CommandInput placeholder="Busca un medicamento..." />
+                                        <CommandEmpty>No se encontro el medicamento.</CommandEmpty>
+                                        <CommandGroup className='h-[500px] overflow-y-auto'>
+                                            {seedMedicines?.map((medicamento,i) => (
+                                            <CommandItem
+                                                key={i}
+                                                value={medicamento.name || ""}
+                                                onSelect={(currentValue) => {
+                                                    console.log(currentValue);
+                                                    setValue(currentValue === value ? "" : medicamento.name);
+                                                    setId(medicamento.id);
+                                                    setOpen(false);
+                                                    setUnit(medicamento.unit);
+                                                    setDefaultValuess({
+                                                      ...defaultValuess,
+                                                      name: medicamento.name || "",
+                                                      unit: medicamento.unit ||  "",
+                                                      content: medicamento.content ||  0,
+                                                      indications: medicamento.indications ||  "",
+                                                      contraindications: medicamento.contraindications ||  "",
+                                                      description: medicamento.description || "",
+                                                      type: medicamento.type || "",
+                                                      expires_at: new Date(),
+                                                      img: "",
+                                                      isImportant: false
+                                                      
+                                                    });
+                                                }}
+                                            >
+                                                <CheckIcon
+                                                className={cn(
+                                                    "mr-2 h-4 w-4",
+                                                    value === medicamento.name ? "opacity-100" : "opacity-0"
+                                                )}
+                                                />
+                                                {medicamento.name}
+                                            </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                        </Command>
+                                    </PopoverContent>
+                                    </Popover>
+          <p className='my-3'>Los campos marcados con * son obligatorios.</p>
+            { JSON.stringify(defaultValuess) }
             <Form {...form}>
               <form 
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -192,8 +299,11 @@ export default function AddMedicine() {
                       <Input
                         style={{ color:'black' }}
                         {...field}
+                        name='name'
+                        onChange={(e)=>onChange(e)}
                         placeholder="Tramadol"
                         disabled={isPending}
+                        value={defaultValuess.name}
                       />
                       </FormControl>
                       <FormDescription />
@@ -208,7 +318,15 @@ export default function AddMedicine() {
                             <FormItem>
                                 <FormLabel>Descripción</FormLabel>
                                 <FormControl>
-                                    <Textarea style={{ color:'black' }} placeholder="Medicamento utilizado para el alivio de síntomas asociados con resfriados y gripes, como congestión nasal, dolor de cabeza, fiebre y malestar general" {...field} className="h-[150px] resize-none" disabled={isPending}/>
+                                    <Textarea
+                                    {...field}
+                                    name='description'
+                                    // onChange={(e)=>onChange(e)}
+                                    value={defaultValuess.description}
+                                    style={{ color:'black' }}
+                                    placeholder="Medicamento utilizado para el alivio de síntomas asociados con resfriados y gripes, como congestión nasal, dolor de cabeza, fiebre y malestar general"
+                                    className="h-[150px] resize-none" 
+                                    disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -222,7 +340,7 @@ export default function AddMedicine() {
                             <FormItem>
                                 <FormLabel>Indicaciones</FormLabel>
                                 <FormControl>
-                                    <Textarea style={{ color:'black' }} placeholder="Este medicamento se utiliza para aliviar los síntomas de la fiebre y el dolor asociados con diversas condiciones médicas, como resfriados, gripe, dolores musculares y dolor de cabeza." {...field} className="h-[130px] resize-none" disabled={isPending}/>
+                                    <Textarea style={{ color:'black' }} placeholder="Este medicamento se utiliza para aliviar los síntomas de la fiebre y el dolor asociados con diversas condiciones médicas, como resfriados, gripe, dolores musculares y dolor de cabeza." {...field} name='indications' value={defaultValuess.indications} className="h-[130px] resize-none" disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -236,7 +354,7 @@ export default function AddMedicine() {
                             <FormItem>
                                 <FormLabel>Contraindicaciones</FormLabel>
                                 <FormControl>
-                                    <Textarea style={{ color:'black' }} placeholder="No debe utilizarse en personas con alergia conocida a alguno de los ingredientes del medicamento." {...field} className="h-[130px] resize-none" disabled={isPending}/>
+                                    <Textarea style={{ color:'black' }} placeholder="No debe utilizarse en personas con alergia conocida a alguno de los ingredientes del medicamento." {...field} name='contraindications' value={defaultValuess.contraindications} className="h-[130px] resize-none" disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -251,7 +369,11 @@ export default function AddMedicine() {
                                 <FormLabel>Contenido total</FormLabel>
                                 <FormControl>
                                 <Input
-                                    style={{ color:'black' }} type="number" placeholder="21" {...field} disabled={isPending}/>
+                                {...field}
+                                name='content'
+                                onChange={(e)=>onChange(e)}
+                                value={defaultValuess.content}
+                                    style={{ color:'black' }} type="number" placeholder="21" disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -266,7 +388,11 @@ export default function AddMedicine() {
                                 <FormLabel>Unidad de medida</FormLabel>
                                 <FormControl>
                                     <Input
-                                        style={{ color:'black' }} placeholder="gr" {...field} disabled={isPending}/>
+                                    {...field}
+                                    name='unit'
+                                    onChange={(e)=>onChange(e)}
+                                    value={defaultValuess.unit}
+                                        style={{ color:'black' }} placeholder="gr" disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -281,7 +407,11 @@ export default function AddMedicine() {
                                 <FormLabel>Tipo</FormLabel>
                                 <FormControl>
                                     <Input
-                                        style={{ color:'black' }} placeholder="Ansiolítico" {...field} disabled={isPending}/>
+                                    {...field}
+                                    name='type'
+                                    onChange={(e)=>onChange(e)}
+                                    value={defaultValuess.type}
+                                        style={{ color:'black' }} placeholder="Ansiolítico" disabled={isPending}/>
                                 </FormControl>
                                 <FormDescription />
                                 <FormMessage />
@@ -314,7 +444,19 @@ export default function AddMedicine() {
                             <FormItem className="flex flex-col mt-4">
                                 <div className="flex">
                                 <FormControl>
-                                    <Checkbox id="isImportant" checked={field.value} onCheckedChange={field.onChange} disabled={isPending}/>
+                                <Checkbox
+                                  id="isImportant"
+                                  checked={defaultValuess.isImportant}
+                                  onCheckedChange={(checked) => {
+                                    field.onChange(()=>{
+                                      setDefaultValuess({
+                                        ...defaultValuess,
+                                        isImportant: !!checked
+                                      });
+                                    }); // Llamada a la función onChange del campo
+                                  }}
+                                  disabled={isPending}
+                                />
                                 </FormControl>
                                 <label htmlFor="isImportant" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ml-2">Medicamento importante</label>
                                 </div>
