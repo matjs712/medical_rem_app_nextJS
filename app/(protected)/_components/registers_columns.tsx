@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge"
 import { Medicine } from "./medicines_columns"
 import NoSsr from "@mui/material/NoSsr"
 import SeeMoreRegister from "./seeMoreRegister"
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu"
+import { UpdateStateRegisters } from "./updateStateRegister"
 
 export type Register = {
   id:                string
@@ -109,8 +111,6 @@ export const columns: ColumnDef<Register>[] = [
           time: register.time,
           totalTime: register.totalTime,
         }
-        console.log('row',register);
-
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -126,8 +126,10 @@ export const columns: ColumnDef<Register>[] = [
                 <SeeMoreRegister rem={registers}/>
               </NoSsr>
 
-            {/* 
               <DropdownMenuSeparator />
+              
+              <UpdateStateRegisters id={ register.id } type="table"/>
+            {/* 
 
               <EditSheet medicine={medicine}/>
 

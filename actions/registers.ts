@@ -70,20 +70,39 @@ export const updateStateRegister = async (id: string) => {
     const user = await currentUser();
     if(!user) return { error: "No se encontró al usuario" }
 
-    const register = db.registers.findUnique({
+    const register = await db.registers.findUnique({
         where: { id: id }
     })
+    
     if(!register) return { error: "No se encontró el registro." }
 
     await db.registers.update({
         where: { id },
         data: {
-            isCompleted: true
+            isCompleted: !register?.isCompleted
         }
     })
 
     revalidatePath('/dashboard');
 
-    return { success: 'Tratamiento finalizado!' }
+    return { success: 'Tratamiento actualizado!' }
+}
+
+export const getRegister = async (id: string) => {
+
+    const user = await currentUser();
+    if(!user) return { error: "No se encontró al usuario" }
+
+    const register = await db.registers.findUnique({
+        where: { id: id },
+        include: {
+            remedies: true,
+        },
+    })
+    
+    if(!register) return { error: "No se encontró el registro." }
+    
+    return register;
+
 }
 

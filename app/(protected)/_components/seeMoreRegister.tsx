@@ -35,8 +35,8 @@ const SeeMoreRegister = ({ rem }: { rem: any }) => {
   console.log('rem',rem);
     return (
       <Dialog>
-        <DialogTrigger>
-          <Button variant="outline" className="w-full flex items-center gap-2 font-normal"><CiCirclePlus/> Ver detalles</Button>
+        <DialogTrigger className="w-full">
+          <Button variant="outline" className="w-full flex items-center gap-2 font-normal justify-start"><CiCirclePlus/> Ver detalles</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
