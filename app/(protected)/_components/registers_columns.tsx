@@ -9,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import EditSheet from "@/components/edit-sheet"
 import DeleteMedicine from "./delete_medicine"
 import SeeMoreMedicine from "./see_more_medicine"
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +17,7 @@ import NoSsr from "@mui/material/NoSsr"
 import SeeMoreRegister from "./seeMoreRegister"
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu"
 import { UpdateStateRegisters } from "./updateStateRegister"
+import EditSheetRegisters from "./edit_register_sheet"
 
 export type Register = {
   id:                string
@@ -129,12 +129,12 @@ export const columns: ColumnDef<Register>[] = [
               <DropdownMenuSeparator />
               
               <UpdateStateRegisters id={ register.id } type="table"/>
-            {/* 
-
-              <EditSheet medicine={medicine}/>
-
+              
               <DropdownMenuSeparator />
 
+              <EditSheetRegisters type="table" register={register}/>
+
+            {/* 
               <DeleteMedicine medicine={medicine}/> */}
 
             </DropdownMenuContent>

@@ -54,7 +54,7 @@ import { CiEdit } from 'react-icons/ci'
 import { getMedicine } from '@/data/remedios'
 
 
-const EditSheetRegisters :  React.FC<{ register: Register }> = ({ register }) => {
+const EditSheetRegisters :  React.FC<{ register: Register, type?: string }> = ({ register, type }) => {
 
 const [isPending, startTransition] = useTransition();
   const [show, setShow] = useState<boolean>(false)
@@ -119,7 +119,7 @@ const [isPending, startTransition] = useTransition();
         setDate(register?.start_at)
         const medicines = await getData();
         setMedicines(medicines);
-        const registersMap = await getRegisters();
+        // const registersMap = await getRegisters();
         setLoading(false);
     }
     getMedicinesAll();
@@ -132,7 +132,8 @@ const [isPending, startTransition] = useTransition();
             remediesId: register.remediesId,
             dosis: register.dosis,
             // start_at: register.start_at || null,
-            lapsus: register.lapsus || undefined,
+            // @ts-ignore
+            lapsus: register?.time === 'hrs' ? (register.lapsus/2) : register?.lapsus || undefined,
             isCompleted: typeof register.isCompleted === 'boolean' ? register.isCompleted : false,
             time: register.time || undefined,
         },
@@ -178,7 +179,9 @@ const [isPending, startTransition] = useTransition();
             } catch (error) {
               console.log(error);
             } finally {
-              // redirect('/dashboard');
+              if(type == 'table'){
+                redirect('/registros');
+              }
             }
         })
     }
@@ -187,8 +190,11 @@ const [isPending, startTransition] = useTransition();
   return (
     <>
         <Sheet>
-        <SheetTrigger>
-            <Button variant="outline" className="text-lg font-bold"><CiEdit/></Button>
+        <SheetTrigger className={type && "w-full"}>
+            <Button variant="outline" className={type ? "flex items-center justify-start gap-2 w-full font-normal" : "text-lg font-bold"}>
+            <CiEdit/>
+              { type && "Editar"}
+            </Button>
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-4 w-[100vw] left-0 sm:left-[auto] sm:w-3/4" >
             <SheetHeader className="w-full">
