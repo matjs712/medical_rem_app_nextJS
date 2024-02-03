@@ -283,7 +283,7 @@ export default function AddMedicine() {
                                     </PopoverContent>
                                     </Popover>
           <p className='my-3'>Los campos marcados con * son obligatorios.</p>
-            { JSON.stringify(defaultValuess) }
+            {/* { JSON.stringify(defaultValuess) } */}
             <Form {...form}>
               <form 
                 onSubmit={form.handleSubmit(onSubmit)}
