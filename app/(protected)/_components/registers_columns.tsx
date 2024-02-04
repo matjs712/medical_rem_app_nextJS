@@ -18,6 +18,7 @@ import SeeMoreRegister from "./seeMoreRegister"
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu"
 import { UpdateStateRegisters } from "./updateStateRegister"
 import EditSheetRegisters from "./edit_register_sheet"
+import { DeleteRegisters } from "./delete_register"
 
 export type Register = {
   id:                string
@@ -50,9 +51,9 @@ export const columns: ColumnDef<Register>[] = [
       cell: ({ row }:{row : any}) => {
         let time = row.original.time
         let formattedLapsus = row.original.lapsus;
-        if(time == 'hrs') {
-          formattedLapsus = row.original.lapsus / 2
-        }
+        // if(time == 'hrs') {
+        //   formattedLapsus = row.original.lapsus / 2
+        // }
       return (<div className="pl-4 font-medium">{formattedLapsus}</div>)
     },
     },
@@ -134,8 +135,7 @@ export const columns: ColumnDef<Register>[] = [
 
               <EditSheetRegisters type="table" register={register}/>
 
-            {/* 
-              <DeleteMedicine medicine={medicine}/> */}
+              <DeleteRegisters id={register.id}/>
 
             </DropdownMenuContent>
           </DropdownMenu>

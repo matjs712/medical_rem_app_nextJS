@@ -29,10 +29,10 @@ export const addRegister = async (values: any
     if(!medicine) return { error: "No se encontró la medicina" }
 
 
-    if(time == 'hrs'){
-        timeToMinutes = lapsus * 2;
-    }
-    const newValues = { ...values, userId: user.id, lapsus: timeToMinutes, start_at: new Date(start_at) }
+    // if(time == 'hrs'){
+    //     timeToMinutes = lapsus * 2;
+    // }
+    const newValues = { ...values, userId: user.id, lapsus, start_at: new Date(start_at) }
     
     await db.registers.create({
         data: newValues
@@ -105,4 +105,23 @@ export const getRegister = async (id: string) => {
     return register;
 
 }
+export const DeleteRegister = async (id: string) => {
 
+    const user = await currentUser();
+    if(!user) return { error: "No se encontró al usuario" }
+
+    const register = await db.registers.findUnique({
+        where: { id: id }
+    })
+    
+    if(!register) return { error: "No se encontró el registro." }
+
+    await db.registers.delete({
+        where: {
+            id
+        }
+    })
+    
+    return { success: "Registro eliminado con exíto." };
+
+}

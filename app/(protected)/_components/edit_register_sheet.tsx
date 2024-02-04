@@ -133,7 +133,8 @@ const [isPending, startTransition] = useTransition();
             dosis: register.dosis,
             // start_at: register.start_at || null,
             // @ts-ignore
-            lapsus: register?.time === 'hrs' ? (register.lapsus/2) : register?.lapsus || undefined,
+            lapsus: register?.lapsus || undefined, 
+            // register?.time === 'hrs' ? (register.lapsus/2) : register?.lapsus || undefined,
             isCompleted: typeof register.isCompleted === 'boolean' ? register.isCompleted : false,
             time: register.time || undefined,
         },

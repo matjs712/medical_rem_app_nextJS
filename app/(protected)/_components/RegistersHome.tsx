@@ -66,7 +66,7 @@ const RegistersHome = async () => {
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Cada</Label>
-                                <CardDescription>{rem.lapsus ?  rem.time == 'hrs' ? (rem.lapsus/2) + " horas" : rem.lapsus + " minutos" : 'Sin registro'  }</CardDescription>
+                                <CardDescription>{rem.lapsus ?  rem.lapsus + " " + rem.time : "Sin registro"}</CardDescription>
                             </div>
                         </div>
                         </form>
