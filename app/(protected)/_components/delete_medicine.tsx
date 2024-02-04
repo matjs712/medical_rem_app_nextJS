@@ -29,25 +29,25 @@ const DeleteMedicine: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
             
             try {
                 
-                const data = await deleteMedicine({ id: medicine.id, url: medicine.img });
-                if (data?.success) {
-                toast.success(data?.success, {
-                    description: `Se ha eliminado la medicina ${medicine.name} con éxito!`,
-                    action: {
-                    label: "Vísto",
-                    onClick: () => console.log("Undo"),
-                  },
-                });
-              } else if (data?.error) {
-                toast.error(data?.error, {
-                  description: `Error al eliminar la medicina ${medicine.name}`,
-                  action: {
-                      label: "Vísto",
-                    onClick: () => console.log("Undo"),
-                  },
-                });
-             }
-            
+                await deleteMedicine({ id: medicine.id, url: medicine?.img }).then(( data )=>{  
+                  if (data?.success) {
+                    toast.success(data?.success, {
+                        description: `Se ha eliminado la medicina ${medicine.name} con éxito!`,
+                        action: {
+                        label: "Vísto",
+                        onClick: () => console.log("Undo"),
+                      },
+                    });
+                  } else if (data?.error) {
+                    toast.error(data?.error, {
+                      description: `Error al eliminar la medicina ${medicine.name}`,
+                      action: {
+                          label: "Vísto",
+                        onClick: () => console.log("Undo"),
+                      },
+                    });
+                  }
+              })
             } catch (error) {
                 console.log(error);
             } finally {

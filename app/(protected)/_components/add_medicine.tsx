@@ -6,10 +6,8 @@ import { Input } from "@/components/ui/input"
 import { FaPlus } from "react-icons/fa"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -34,7 +32,7 @@ import { MedicinesSchema } from '@/schemas'
 import { getMedicinesApi } from '@/data/apiMedicines'
 import { ApiMedicines } from './medicines_columns'
 import { cn } from '@/lib/utils'
-
+import { useRouter } from 'next/router'
 const options = {
   title: "Fecha de expiración",
   autoHide: true,
@@ -103,97 +101,14 @@ export default function AddMedicine() {
   const [id, setId] = useState<string  | null>("");
   const [unit, setUnit] = useState<string | null | undefined>("");
   const [loading, setLoading] = useState(false);
+  const [redirec, setRedirec] = useState(false);
   
   const [seedMedicines, setSeedMedicines] = useState<ApiMedicines[]>([]);
-
 
   const form = useForm<z.infer<typeof MedicinesSchema>>({
     resolver: zodResolver(MedicinesSchema),
     defaultValues: defaultValuess
   });
-
-  const handleClose = (state: boolean) => setShow(state);
-  const handleChange = (selectedDate: Date) => {
-    const expiresAt = selectedDate.toISOString();
-    setDate(expiresAt);
-    setDefaultValuess({
-      ...defaultValuess,
-      expires_at: new Date(expiresAt)
-    })
-  };
-
-  const onSubmit = ( values: z.infer<typeof MedicinesSchema> ) => {
-      startTransition( async ()=> {
-        
-        try {
-          if (!inputFileRef.current?.files) throw new Error("No file selected");
-            const file = inputFileRef.current.files[0];
-
-            if(file){
-              const imgUrl = await uploadImage({ file });
-              const mappedValues = { ...defaultValuess, img: imgUrl };
-
-              addMedicine(mappedValues)
-              .then((resp)=> {
-                if(resp.success) {
-                  setSuccess(resp.success);
-                  toast.success(resp.success, {
-                    description: `Se ha añadido la medicina ${values.name} con éxito!`,
-                    action: {
-                      label: "Vísto",
-                      onClick: () => console.log("Undo"),
-                    },
-                  });
-              
-                } else if(resp.error) {
-                  toast.error(resp.error, {
-                    description: `Error al intentar añadir la medicina ${values.name}`,
-                    action: {
-                      label: "Vísto",
-                      onClick: () => console.log("Undo"),
-                    },
-                  });
-                }
-            })
-          } else {
-            addMedicine(defaultValuess)
-              .then((resp)=> {
-                if(resp.success) {
-                  setSuccess(resp.success);
-                  toast.success(resp.success, {
-                    description: `Se ha añadido la medicina ${values.name} con éxito!`,
-                    action: {
-                      label: "Vísto",
-                      onClick: () => console.log("Undo"),
-                    },
-                  });
-              
-                } else if(resp.error) {
-                  toast.error(resp.error, {
-                    description: `Error al intentar añadir la medicina ${values.name}`,
-                    action: {
-                      label: "Vísto",
-                      onClick: () => console.log("Undo"),
-                    },
-                  });
-                }
-            })
-          }
-        } catch (error) {
-          console.log(error);
-        } finally {
-          redirect('/mis-medicamentos');
-        }
-
-    })
-  }
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDefaultValuess({
-      ...defaultValuess,
-      [e.target.name] : e.target.value
-    })
-  }
-  
 
   useEffect(() => {
 
@@ -211,6 +126,124 @@ export default function AddMedicine() {
   }, [])
   
 
+  const handleClose = (state: boolean) => setShow(state);
+
+  const handleChange = (selectedDate: Date) => {
+    const expiresAt = selectedDate.toISOString();
+    setDate(expiresAt);
+    setDefaultValuess({
+      ...defaultValuess,
+      expires_at: new Date(expiresAt)
+    })
+  };
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDefaultValuess({
+      ...defaultValuess,
+      [e.target.name] : e.target.value
+    })
+  }
+  const onChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDefaultValuess({
+      ...defaultValuess,
+      content: parseInt(e.target.value)
+    })
+  }
+
+  const onSubmit = ( values: z.infer<typeof MedicinesSchema> ) => {
+    if(!defaultValuess.name) {
+      setError('El medicamento necesita un nombre!')!;
+      return;
+    }
+    if(defaultValuess.content && !defaultValuess.unit) {
+      setError('Debes ingresar una unidad de medida!')!;
+      return;
+    }
+    if(defaultValuess.content && (defaultValuess.content < 0 || defaultValuess.content == 0)){
+      setError("Debes ingresar una cantidad mayor que 0!" );
+      return;
+    };
+    if(defaultValuess.unit && !defaultValuess.content) {
+      setError('Debes ingresar una cantidad!')!;
+      return;
+    }
+    startTransition( async ()=> {
+      setError("");
+      setSuccess("");
+      // try {
+        if (!inputFileRef.current?.files) throw new Error("No file selected");
+          const file = inputFileRef.current.files[0];
+
+          if(file){
+            const imgUrl = await uploadImage({ file });
+            const mappedValues = { ...defaultValuess, img: imgUrl };
+
+            addMedicine(mappedValues)
+            .then((resp)=> {
+              if(resp.success) {
+                setSuccess(resp.success);
+                toast.success(resp.success, {
+                  description: `Se ha añadido la medicina ${values.name} con éxito!`,
+                  action: {
+                    label: "Vísto",
+                    onClick: () => console.log("Undo"),
+                  },
+                });
+                // if(resp.redirect){
+                //   setRedirec(true);
+                // }
+                redirect("/mis-medicamentos");
+              } else if(resp.error) {
+                setError(resp.error);
+                toast.error(resp.error, {
+                  description: `Error al intentar añadir la medicina ${values.name}`,
+                  action: {
+                    label: "Vísto",
+                    onClick: () => console.log("Undo"),
+                  },
+                });
+              }
+              
+            })
+        } else {
+          addMedicine(defaultValuess)
+            .then((resp)=> {
+              if(resp.success) {
+                setSuccess(resp.success);
+                toast.success(resp.success, {
+                  description: `Se ha añadido la medicina ${values.name} con éxito!`,
+                  action: {
+                    label: "Vísto",
+                    onClick: () => console.log("Undo"),
+                  },
+                });
+                // if(resp.redirect){
+                //   setRedirec(true);
+                // }
+                redirect("/mis-medicamentos");
+              } else if(resp.error) {
+                setError(resp.error);
+                toast.error(resp.error, {
+                  description: `Error al intentar añadir la medicina ${values.name}`,
+                  action: {
+                    label: "Vísto",
+                    onClick: () => console.log("Undo"),
+                  },
+                });
+              }
+          })
+        }
+
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      // if(!isPending ){
+      //     redirect("/mis-medicamentos");
+      // }
+  })
+}
+
+
+
   return (
     <Sheet>
       <SheetTrigger >
@@ -224,6 +257,7 @@ export default function AddMedicine() {
           <SheetTitle>Añadir medicamento</SheetTitle>
           <SheetDescription className="h-[80vh] overflow-scroll">
             <p className='mb-3'>Aquí puedes buscar un medicamento y modificar sus datos a tu conveniencia o simplemente registrar tu medicamento.</p>
+            {/* { JSON.stringify(defaultValuess) } */}
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -283,7 +317,6 @@ export default function AddMedicine() {
                                     </PopoverContent>
                                     </Popover>
           <p className='my-3'>Los campos marcados con * son obligatorios.</p>
-            {/* { JSON.stringify(defaultValuess) } */}
             <Form {...form}>
               <form 
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -371,7 +404,7 @@ export default function AddMedicine() {
                                 <Input
                                 {...field}
                                 name='content'
-                                onChange={(e)=>onChange(e)}
+                                onChange={(e)=>onChangeContent(e)}
                                 value={defaultValuess.content}
                                     style={{ color:'black' }} type="number" placeholder="21" disabled={isPending}/>
                                 </FormControl>

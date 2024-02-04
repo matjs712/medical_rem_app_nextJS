@@ -67,30 +67,6 @@ export const columns: ColumnDef<Medicine>[] = [
       accessorKey: "name",
       header: "Nombre",
     },
-    // {
-    //   accessorKey: "dosis",
-    //   header: "Dosis",
-    // },
-    // {
-    //   accessorKey: "start_at",
-    //   header: "Start Date",
-    // },
-    // {
-    //   accessorKey: "indications",
-    //   header: "Indications",
-    // },
-    // {
-    //   accessorKey: "contraindications",
-    //   header: "Contraindications",
-    // },
-    // {
-    //   accessorKey: "time",
-    //   header: "Time",
-    // },
-    // {
-    //   accessorKey: "description",
-    //   header: "Description",
-    // },
     {
       accessorKey: "content",
       header: "Contenido",

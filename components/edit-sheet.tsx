@@ -41,7 +41,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { MedicinesSchema } from "@/schemas";
+import { MedicinesEditSchema, MedicinesSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateMedicine } from "@/actions/remedies";
 import { FormError } from "./form-error";
@@ -104,8 +104,8 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
       },
     }
 
-    const form = useForm<z.infer<typeof MedicinesSchema>>({
-        resolver: zodResolver(MedicinesSchema),
+    const form = useForm<z.infer<typeof MedicinesEditSchema>>({
+        resolver: zodResolver(MedicinesEditSchema),
         defaultValues: {
           id: medicine.id,
           name: medicine.name || '',
@@ -127,10 +127,10 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
         setDate(expiresAt);
       };
 
-      const onSubmit = (values: z.infer<typeof MedicinesSchema>) => {
-        // return;
+      const onSubmit = (values: z.infer<typeof MedicinesEditSchema>) => {
+        setError("");
         startTransition(async () => {
-            try {
+            // try {
               if (!inputFileRef.current?.files) {
                 throw new Error("No file selected");
               }
@@ -156,6 +156,7 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
                     },
                   });
                 } else if (data?.error) {
+                  setError(data.error);
                   toast.error(data?.error, {
                     description: `Error al actualizar la medicina ${values.name}`,
                     action: {
@@ -177,7 +178,9 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
                       onClick: () => console.log("Undo"),
                     },
                   });
+                  redirect('/mis-medicamentos');
                 } else if (data?.error) {
+                  setError(data.error);
                   toast.error(data?.error, {
                     description: `Error al actualizar la medicina ${values.name}`,
                     action: {
@@ -189,12 +192,12 @@ const EditSheet: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
               }
           
               
-            } catch (error) {
+            // } catch (error) {
               // Handle errors appropriately
-              console.error('An error occurred:', error);
-            } finally {
-                redirect('/mis-medicamentos');
-            }
+              // console.error('An error occurred:', error);
+            // } finally {
+                
+            // }
           });
           
       }

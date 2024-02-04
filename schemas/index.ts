@@ -66,7 +66,8 @@ export const RegisterSchema = z.object({
 export const MedicinesSchema = z.object({
   id: z.optional(z.string()),
   userId: z.optional(z.string()),
-  name: z.optional(z.string()),
+  name: 
+  z.optional(z.string()),
   // z.string().min(1, {
   //   message: "El nombre es requerido",
   // }),
@@ -124,3 +125,46 @@ export const MedicinesApiSchema = z.object({
   type: z.optional(z.string()),
   expires_at: z.optional(z.date().or(z.string())),
 })
+
+
+export const MedicinesEditSchema = z.object({
+  id: z.optional(z.string()),
+  userId: z.optional(z.string()),
+  name: 
+  // z.optional(z.string()),
+  z.string().min(1, {
+    message: "El nombre es requerido",
+  }),
+  content: z.optional(z.coerce.number().min(0,{
+    message:"Ingresa una cantidad igual o mayor a 0!"
+  }))
+  ,
+  unit: z.optional(z.string())
+  ,
+  indications: z.optional(z.string())
+  ,
+  contraindications: z.optional(z.string())
+  ,
+  description: z.optional(z.string())
+  ,
+  type: z.optional(z.string())
+  ,
+  dosis: z.optional(z.number())
+  ,
+  expires_at: z.optional(z.date().or(z.string()))
+  ,
+  img: z.optional(z.string())
+  ,
+  isImportant: z.optional(z.any()),
+
+}).refine((data) => {
+  if ((data.content && !data.unit)) {
+    return { message: "Si se especifica el contenido total, también se debe especificar su unidad de medida." };
+  }
+  return true;
+}).refine((data) => {
+  if ((data.unit && !data.content)) {
+    return { message: "Si se especifica su unidad de medida, también se debe especificar su contenido." };
+  }
+  return true;
+});
