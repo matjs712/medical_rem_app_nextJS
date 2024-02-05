@@ -266,56 +266,47 @@ export default function AddMedicine() {
                       aria-expanded={open}
                       className="w-full justify-between"
                   >
-                                        {value
-                                            ? seedMedicines?.find((medicamento) => medicamento.name === value)?.name
-                                            : "Selecciona un medicamento..."}
-                                        <ArrowDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-full p-0">
-                                        <Command>
-                                        <CommandInput placeholder="Busca un medicamento..." />
-                                        <CommandEmpty>No se encontro el medicamento.</CommandEmpty>
-                                        <CommandGroup className='h-[500px] overflow-y-auto'>
-                                            {seedMedicines?.map((medicamento,i) => (
-                                            <CommandItem
-                                                key={i}
-                                                value={medicamento.name || ""}
-                                                onSelect={(currentValue) => {
-                                                    console.log(currentValue);
-                                                    setValue(currentValue === value ? "" : medicamento.name);
-                                                    setId(medicamento.id);
-                                                    setOpen(false);
-                                                    setUnit(medicamento.unit);
-                                                    setDefaultValuess({
-                                                      ...defaultValuess,
-                                                      name: medicamento.name || "",
-                                                      unit: medicamento.unit ||  "",
-                                                      content: medicamento.content ||  0,
-                                                      indications: medicamento.indications ||  "",
-                                                      contraindications: medicamento.contraindications ||  "",
-                                                      description: medicamento.description || "",
-                                                      type: medicamento.type || "",
-                                                      expires_at: new Date(),
-                                                      img: "",
-                                                      isImportant: false
+                    {value ? seedMedicines?.find((medicamento) => medicamento.name === value)?.name : "Selecciona un medicamento..."}
+                      <ArrowDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Busca un medicamento..." />
+                      <CommandEmpty>No se encontro el medicamento.</CommandEmpty>
+                      <CommandGroup className='h-[500px] overflow-y-auto'>
+                        {seedMedicines?.map((medicamento,i) => (
+                          <CommandItem
+                            key={i}
+                            value={medicamento.name || ""}
+                            onSelect={(currentValue) => {
+                              console.log(currentValue);
+                              setValue(currentValue === value ? "" : medicamento.name);
+                              setId(medicamento.id);
+                              setOpen(false);
+                              setUnit(medicamento.unit);
+                              setDefaultValuess({
+                                ...defaultValuess,
+                                name: medicamento.name || "",
+                                unit: medicamento.unit ||  "",
+                                content: medicamento.content ||  0,
+                                indications: medicamento.indications ||  "",
+                                contraindications: medicamento.contraindications ||  "",
+                                description: medicamento.description || "",
+                                type: medicamento.type || "",
+                                expires_at: new Date(),
+                                img: "",
+                                isImportant: false
                                                       
-                                                    });
-                                                }}
-                                            >
-                                                <CheckIcon
-                                                className={cn(
-                                                    "mr-2 h-4 w-4",
-                                                    value === medicamento.name ? "opacity-100" : "opacity-0"
-                                                )}
-                                                />
-                                                {medicamento.name}
-                                            </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                        </Command>
-                                    </PopoverContent>
-                                    </Popover>
+                              });
+                            }} >
+                          <CheckIcon className={cn( "mr-2 h-4 w-4", value === medicamento.name ? "opacity-100" : "opacity-0" )}/>{medicamento.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
           <p className='my-3'>Los campos marcados con * son obligatorios.</p>
             <Form {...form}>
               <form 

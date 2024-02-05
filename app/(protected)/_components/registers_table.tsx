@@ -67,6 +67,8 @@ function RegistersTable <TData, TValue>({ columns, data, }: DataTableProps<TData
       switch (key) {
         case 'remedies_name':
           return 'Medicamento'
+        case 'remedies_unit':
+          return 'U.Medida'
         case 'dosis':
           return 'Cantidad'
         case 'lapsus':

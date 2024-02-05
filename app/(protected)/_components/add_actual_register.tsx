@@ -115,6 +115,7 @@ const [isPending, startTransition] = useTransition();
         const registersMap = await getRegisters();
         setLoading(false);
     }
+    setDate(new Date());
     getMedicinesAll();
   }, [])
   
@@ -140,8 +141,12 @@ const [isPending, startTransition] = useTransition();
         // console.log(value);
         setError("");
         setSuccess("");
+        
+        if(id.length == 0) {
+          setError("Debes seleccionar un medicamento!");
+          return;
+        }
         startTransition(async ()=> {
-            try {
               console.log({...values, remediesId:id, start_at: date});
               const newValues = {...values, remediesId:id, start_at: date}
               addRegister(newValues)
@@ -155,7 +160,6 @@ const [isPending, startTransition] = useTransition();
                         onClick: () => console.log("Undo"),
                       },
                     });
-                
                   } else if(resp.error) {
                       setError(resp.error);
                     toast.error(resp.error, {
@@ -167,13 +171,9 @@ const [isPending, startTransition] = useTransition();
                     });
                   }
               })
-            } catch (error) {
-              console.log(error);
-            } finally {
-              if(redirec){
+              if(redirec && setSuccess.length > 0){
                 redirect('/registros');
               }
-            }
         })
     }
 // if(registers.length == 0 || registers.length < 0 ) return '';

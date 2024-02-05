@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
-import { DotLoader } from "react-spinners"
+import { BarLoader, DotLoader } from "react-spinners"
 import DatePicker from "tailwind-datepicker-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -150,11 +150,14 @@ const [isPending, startTransition] = useTransition();
         setSuccess("");
         
         startTransition(async ()=> {
-            try {
+          if(!id) {
+            setError("Debes seleccionar un medicamento!.");
+            return;
+          }
               // console.log({...values, remediesId:id, start_at: date});
               // return;
               const newValues = {...values, remediesId:id, start_at: date, id: register.id}
-              updateRegister(newValues)
+              await updateRegister(newValues)
               .then((resp)=> {
                   if(resp.success) {
                     setSuccess(resp.success);
@@ -176,14 +179,10 @@ const [isPending, startTransition] = useTransition();
                       },
                     });
                   }
-              })
-            } catch (error) {
-              console.log(error);
-            } finally {
-              if(type == 'table'){
-                redirect('/registros');
-              }
-            }
+                })
+                if(type == 'table'){
+                  redirect('/registros');
+                }
         })
     }
 // if(registers.length == 0 || registers.length < 0 ) return '';
@@ -222,9 +221,11 @@ const [isPending, startTransition] = useTransition();
                                         aria-expanded={open}
                                         className="w-full justify-between"
                                         >
-                                        {value
+                                        {
+                                         loading ? <BarLoader color='black'/> : (value
                                             ? medicines.find((medicamento) => medicamento.name === value)?.name
-                                            : "Selecciona un medicamento..."}
+                                            : "Selecciona un medicamento...")
+                                        }
                                         <ArrowDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
@@ -335,7 +336,7 @@ const [isPending, startTransition] = useTransition();
                         <FormError message={error} />
                         <FormSuccess message={success} />
                         
-                            { isPending ? <Button className="mt-2 w-full" type="submit" disabled={isPending}><DotLoader size={20} color="#ffffff"/></Button> : <Button className="mt-2 w-full" type="submit">Actualizar</Button> }
+                            { loading ? <Button className="mt-2 w-full" disabled type="submit">Actualizar</Button> : (isPending ? <Button className="mt-2 w-full" type="submit" disabled={isPending}><DotLoader size={20} color="#ffffff"/></Button> : <Button className="mt-2 w-full" type="submit">Actualizar</Button>) }
                         </form>
                     </Form>
             </SheetDescription>

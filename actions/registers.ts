@@ -44,6 +44,8 @@ export const addRegister = async (values: any
 export const updateRegister = async (values: z.infer<typeof RegistersSchema>) => {
     
     const { id } = values;
+    if(!id) return { error: "Debes seleccionar un medicamento!." }
+
     const user = await currentUser();
     if(!user) return { error: "No se encontró al usuario" }
 

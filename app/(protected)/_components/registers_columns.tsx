@@ -46,6 +46,10 @@ export const columns: ColumnDef<Register>[] = [
       header: "Cantidad",
     },
     {
+      accessorKey: "remedies.unit",
+      header: "U.Medida",
+    },
+    {
       accessorKey: "lapsus",
       header: "Cada",
       cell: ({ row }:{row : any}) => {
@@ -55,7 +59,7 @@ export const columns: ColumnDef<Register>[] = [
         //   formattedLapsus = row.original.lapsus / 2
         // }
       return (<div className="pl-4 font-medium">{formattedLapsus}</div>)
-    },
+      },
     },
     {
       accessorKey: "time",
